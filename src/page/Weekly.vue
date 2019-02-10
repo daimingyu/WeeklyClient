@@ -1,16 +1,14 @@
 <template>
-  <div class="main">
-    <Navigation />
-    <WPublish />
+  <div class="weekly">
+    <WList />
   </div>
 </template>
 
 <script>
-import Navigation from '../components/Navigation';
-import WPublish from '../components/WPublish';
+import WList from '../components/WList';
 export default {
-  name: 'Main',
-  components: { Navigation, WPublish },
+  name: 'Weekly',
+  components: { WList },
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
@@ -21,7 +19,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.main{
+.weekly{
   overflow: hidden;
+  float: right;
 }
 </style>

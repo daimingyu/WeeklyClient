@@ -1,53 +1,110 @@
 <template>
 	<div class="weekly-publish">
-        <h1 class="weekly-publish-title">《添加周报》</h1>
-		<div id="weekly-publish-wrap">
+        <h1 class="weekly-publish-title">《添加周总结》</h1>
+		<form id="weekly-publish-wrap">
             <div class="publish-row-title">
-                <span>周报标题：</span>
-                <textarea maxlength="20" name="weekly-name" id="weekly-name" placeholder="请输入周报标题，限20个字符">
+                <span>文章标题：</span>
+                <textarea 
+                    maxlength="20" 
+                    name="weekly-name"
+                    ref="weeklyName" 
+                    required
+                    placeholder="请输入周报标题，限20个字符">
                 </textarea>
             </div>
             <div class="publish-row">
                 <span>工作内容：</span>
-                <textarea maxlength="500" name="work-content" placeholder="请输入工作内容（总结上期工作的成果或内容），限500个字符">
+                <textarea 
+                    maxlength="500" 
+                    name="work-content" 
+                    ref="workContent" 
+                    placeholder="请输入工作内容（总结上期工作的成果或内容），限500个字符">
                 </textarea>
             </div>
             <div class="publish-row">
                 <span>解决问题：</span>
-                <textarea maxlength="500" name="solve-problems" placeholder="请输入解决问题（突出工作中解决的实际困难），限500个字符">
-                </textarea>
-            </div>
-            <div class="publish-row">
-                <span>下周计划：</span>
-                <textarea maxlength="500" name="next-work-plan" placeholder="请输入下周计划（下周工作开展思路），限500个字符">
-                </textarea>
-            </div>
-            <div class="publish-row">
-                <span>遗留问题：</span>
-                <textarea maxlength="500" name="remaining-problems" placeholder="请输入遗留问题（遗留问题的解决办法及具体处理时间），限500个字符">
+                <textarea
+                    maxlength="500" 
+                    name="solve-problems" 
+                    ref="solveProblems"
+                    placeholder="请输入解决问题（突出工作中解决的实际困难），限500个字符">
                 </textarea>
             </div>
             <div class="publish-row">
                 <span>经验总结：</span>
-                <textarea maxlength="500" name="summing-up-experience" placeholder="请输入经验总结（总结经验教训），限500个字符">
+                <textarea 
+                    maxlength="500" 
+                    name="summing-up-experience" 
+                    ref="summingUpExperience" 
+                    placeholder="请输入经验总结（总结经验教训），限500个字符">
+                </textarea>
+            </div>
+            <div class="publish-row">
+                <span>遗留问题：</span>
+                <textarea 
+                    maxlength="500" 
+                    name="remaining-problems" 
+                    ref="remainingProblems"
+                    placeholder="请输入遗留问题（遗留问题的解决办法及具体处理时间），限500个字符">
+                </textarea>
+            </div>
+            <div class="publish-row">
+                <span>下周计划：</span>
+                <textarea 
+                    maxlength="500" 
+                    name="next-work-plan" 
+                    ref="nextWorkPlan"
+                    placeholder="请输入下周计划（下周工作开展思路），限500个字符">
                 </textarea>
             </div>
             <div class="pubish-row-button">
-                <button class="publish-save">保存</button>
-                <button class="publish-send">发送</button>
+                <button class="publish-save" v-on:click="saveWeekly">保存</button>
             </div>
-        </div>
+		</form>
 	</div>
 </template>
 
 <script>
+import $ from 'jquery';
+import API from '../api/api.vue';
+import Cookie from '../utils/cookie.vue';
 export default {
     name: 'WPublish',
 	data () {
 		return {
 			msg: 'Welcome to Your Vue.js App'
 		}
-	}
+    },
+    methods: {
+        saveWeekly(){
+            let path = API.root + API.insertWeekly;
+            let params = {
+                weeklyName: encodeURIComponent(this.$refs.weeklyName.value.trim()),
+                workContent: encodeURIComponent(this.$refs.workContent.value.trim()),
+                solveProblems: encodeURIComponent(this.$refs.solveProblems.value.trim()),
+                summingUpExperience: encodeURIComponent(this.$refs.summingUpExperience.value.trim()),
+                remainingProblems: encodeURIComponent(this.$refs.remainingProblems.value.trim()),
+                nextWorkPlan: encodeURIComponent(this.$refs.nextWorkPlan.value.trim()),
+                userId: JSON.parse(Cookie.get("PPU")).userId
+            }
+            console.log(params,path);
+            $.ajax({
+                type: 'POST',
+                url: path,
+                data: params,
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+                    if(data.data.data.success){
+                        alert("保存成功");
+                        window.location.href = "//localhost:8081/weekly";
+                    }else{
+                        alert("保存失败");
+                    }
+                }
+            });
+        }
+    }
 }
 </script>
 
@@ -55,7 +112,6 @@ export default {
 <style scoped>
 .weekly-publish{
     width: 720px;
-	float: right;
 	margin: 0;
 	padding: 0;
 	background-color: #ffffff;

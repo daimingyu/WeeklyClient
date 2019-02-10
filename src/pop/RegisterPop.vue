@@ -1,6 +1,6 @@
 <template>
-  <div class="login-pop" style="display:none" ref="LPop">
-        <p>登录</p>
+  <div class="register-pop" style="display:none" ref="LPop">
+        <p>注册</p>
         <p>
             <input 
                 type="text" 
@@ -8,7 +8,8 @@
                 id="username" 
                 v-on:blur.prevent="userNameBlur" 
                 placeholder="请输入用户名"
-                ref="username"/>
+                ref="username"
+                maxlength="10"/>
             <span class="username-tips" ref="uTips"></span>
         </p>
         <p>
@@ -18,11 +19,12 @@
                 id="password" 
                 v-on:blur.prevent="passwordBlur" 
                 placeholder="请输入密码"
-                ref="password"/>
+                ref="password"
+                maxlength="20"/>
             <span class="password-tips" ref="pTips"></span>
         </p>
         <p>
-            <span class="login-button" v-on:click="login">登录</span>
+            <span class="register-button" v-on:click="register">注册</span>
             <span class="cancel-button" v-on:click="cancelPop">取消</span>
             <span class="clearfix"></span>
         </p>
@@ -31,9 +33,8 @@
 
 <script>
 import API from '../api/api.vue';
-import Cookie from '../utils/cookie.vue';
 export default {
-    name: 'LoginPop',
+    name: 'RegisterPop',
     data () {
         return {
             msg: 'Welcome to Your Vue.js App'
@@ -58,7 +59,7 @@ export default {
                 this.$refs.pTips.innerHTML = '';
             }else{
                 this.$refs.pTips.innerHTML = "*请输入密码";
-            }
+              }
         },
         /**
          * 判断用户名是否存在
@@ -74,16 +75,16 @@ export default {
             };
             this.$jsonp(path, params).then((data) =>{
                 if(data.data.hasUser){
-                    callback.apply(this);
+                    this.$refs.uTips.innerHTML = "*该用户名已被占用";
                 }else{
-                    this.$refs.uTips.innerHTML = "*不存在该用户名";
+                    callback.apply(this);
                 }
             });
         },
         /**
-         * 用户登录处理函数
+         * 用户注册处理函数
          */
-        login(){
+        register(){
 
             let oUserName = encodeURIComponent(this.$refs.username.value.trim());
             let oPassword = this.$refs.password.value.trim();
@@ -99,7 +100,7 @@ export default {
             }
 
             this.checkHasUser(oUserName, function(){
-                let path = API.root + API.checkUserLogin;
+                let path = API.root + API.insertUser;
                 let params = {
                     username: oUserName,
                     password: oPassword,
@@ -107,21 +108,14 @@ export default {
                     callbackName: "jsonpCallback"
                 };
                 this.$jsonp(path, params).then((data) =>{
-                    if(data.data.loginFlag){
-                        alert("登陆成功");
-                        this.setCookie(data.data);
+                    if(data.data.success){
+                        alert("注册成功");
                         window.location.reload();
                     }else{
-                        this.$refs.pTips.innerHTML = "*密码错误";
+                        alert("注册失败");
                     }
                 });
             });
-        },
-        /**
-         * 将用户名写入cookie
-         */
-        setCookie(obj){
-            Cookie.set("PPU", JSON.stringify(obj));
         },
         /**
          * 弹出用户登录窗
@@ -130,14 +124,14 @@ export default {
             var oMask = document.createElement('div');
             oMask.className = 'mask';
             document.getElementsByTagName('body')[0].appendChild(oMask);
-            document.getElementsByClassName('login-pop')[0].style.display = 'block';
+            document.getElementsByClassName('register-pop')[0].style.display = 'block';
         },
         /**
          * 取消用户登陆窗
          */
         cancelPop(){
             document.getElementsByClassName('mask')[0].remove();
-            document.getElementsByClassName('login-pop')[0].style.display = 'none';
+            document.getElementsByClassName('register-pop')[0].style.display = 'none';
             this.clearPopContent();
         },
         /**
@@ -155,7 +149,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.login-pop{
+.register-pop{
     width: 318px;
     background-color: #ffffff;
     position: absolute;
@@ -167,31 +161,31 @@ export default {
     z-index: 2;
 	border-radius: 2px;
 }
-.login-pop p{
+.register-pop p{
     margin: 16px 0;
 }
-.login-pop input{
+.register-pop input{
     padding: 10px;
     width: 100%;
     border: 1px solid #e9e9e9;
     outline: none;
     box-sizing: border-box;
 }
-.login-pop .login-button, .login-pop .cancel-button{
+.register-pop .register-button, .register-pop .cancel-button{
         display: inline-block;
         height: 35px;
         line-height: 35px;
         outline: none;
         cursor: pointer;
 }
-.login-pop .login-button{
+.register-pop .register-button{
     width: 130px;
     float: left;
     color: #fff;
     background-color: #007fff;
     border: 1px solid #007fff;
 }
-.login-pop .cancel-button{
+.register-pop .cancel-button{
     width: 130px;
     float: right;
     color: #007fff;

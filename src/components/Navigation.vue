@@ -1,30 +1,90 @@
 <template>
 	<div class="navigation">
 		<div class="guide-login">
-			<p><span v-on:click="showLoginPop">登录</span> · <span>注册</span></p>
+			<template v-if="hasLogin">
+				<p><span>{{ username }}</span> · <span v-on:click="logout">退出</span></p>
+			</template> 
+			<template v-else>
+				<p><span v-on:click="showLoginPop">登录</span> · <span v-on:click="showRegisterPop">注册</span></p>
+			</template> 
 		</div>
 		<ul class="navigation-wrap">
-			<li><router-link to="/">首页</router-link></li>
-			<li><router-link to="/weekly">周报</router-link></li>
-			<li><router-link to="/draft">草稿</router-link></li>
-			<li><router-link to="/profile">资料</router-link></li>
+			<li v-for="(item, index) in tabContent" v-bind:key="{index}" v-bind:class="{active:index == curTab}" v-on:click="tabClick(index)">
+				<router-link v-bind:to="item.path">
+					<i v-bind:class="item.iconfont"></i>
+					<span>{{ item.name }}</span>
+				</router-link>
+			</li>
 		</ul>
 		<LoginPop ref="loginPop"/>
+		<RegisterPop ref="registerPop"/>
 	</div>
 </template>
 <script>
 import LoginPop from '../pop/LoginPop';
+import RegisterPop from '../pop/RegisterPop';
+import Cookie from '../utils/cookie';
 export default {
 	name: 'Navigation',
-	components: { LoginPop },
+	components: { LoginPop, RegisterPop },
 	data () {
 		return {
-			msg: 'Welcome to Your Vue.js App'
+			msg: 'Welcome to Your Vue.js App',
+			hasLogin: false,
+			username: "用户名",
+			curTab: 0,
+			tabContent: [
+				{
+					path: '/',
+					iconfont: 'iconfont icon-home',
+					name: '首页'
+				},
+				{
+					path: '/weekly',
+					iconfont: 'iconfont icon-weekly',
+					name: '我的总结'
+				},
+				{
+					path: '/profile',
+					iconfont: 'iconfont icon-shezhi',
+					name: '个人中心'
+				}
+			]
+		}
+	},
+	created(){
+		let PPU = Cookie.get('PPU');
+		let username = JSON.parse(PPU).userName;
+		if(PPU){
+			this.hasLogin = true;
+			this.username = username;
+		}else{
+			this.hasLogin = false;
 		}
 	},
 	methods: {
+		/**
+		 * 展示登陆弹窗
+		 */
 		showLoginPop () {
 			this.$refs.loginPop.startPop();
+		},
+		/**
+		 * 展示注册弹窗
+		 */
+		showRegisterPop () {
+			this.$refs.registerPop.startPop();
+		},
+		/**
+		 * 退出
+		 */
+		logout(){
+			Cookie.del('PPU');
+			window.location.reload();
+		},
+		tabClick(index){
+			console.log(index);
+			this.curTab = index;
 		}
 	}
 }
@@ -61,13 +121,26 @@ export default {
 	height: 50px;
 	line-height: 50px;
 	cursor: pointer;
+	box-sizing: border-box;
+	border-left: 1px solid transparent;
+}
+.navigation-wrap li span{
+	font-size: 14px;
 }
 .navigation-wrap li a{
 	display: inline-block;
 	width: 100%;
 	height: 50px;
+	color: #000000;
+	text-align: left;
+	padding-left: 16px;
+	box-sizing: border-box;
 }
 .navigation-wrap li:hover{
+	background-color: #eff0f3;
+}
+.active{
+	border-left: 1px solid #007fff!important;
 	background-color: #eff0f3;
 }
 </style>

@@ -3,7 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueJsonp from 'vue-jsonp'
+//css文件
+import './css/reset.css'
+import './css/iconfont.css'
 
+Vue.use(VueJsonp)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

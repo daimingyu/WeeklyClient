@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/page/Main'
-import Draft from '@/page/Draft'
 import Profile from '@/page/Profile'
 import Weekly from '@/page/Weekly'
 
@@ -14,11 +13,6 @@ export default new Router({
       path: '/',
       name: 'Main',
       component: Main
-    },
-    {
-      path: '/draft',
-      name: 'Draft',
-      component: Draft
     },
     {
       path: '/profile',

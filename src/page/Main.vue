@@ -1,19 +1,32 @@
 <template>
   <div class="main">
-    <Navigation />
-    <WPublish />
+      <template v-if="hasLogin">
+        <WPublish />
+      </template>
+      <template v-else>
+        <Unlogin />
+      </template>
   </div>
 </template>
 
 <script>
-import Navigation from '../components/Navigation';
 import WPublish from '../components/WPublish';
+import Unlogin from '../components/Unlogin';
+import Cookie from '../utils/cookie.vue';
 export default {
   name: 'Main',
-  components: { Navigation, WPublish },
+  components: { WPublish, Unlogin },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      hasLogin: false
+    }
+  },
+  created(){
+    if(Cookie.get('PPU')){
+        this.hasLogin = true;
+    }else{
+        this.hasLogin = false;
     }
   }
 }
@@ -23,5 +36,6 @@ export default {
 <style scoped>
 .main{
   overflow: hidden;
+	float: right;
 }
 </style>
