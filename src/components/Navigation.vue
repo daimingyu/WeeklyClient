@@ -53,13 +53,27 @@ export default {
 		}
 	},
 	created(){
+		//获取登陆态
 		let PPU = Cookie.get('PPU');
-		let username = JSON.parse(PPU).userName;
+		//设置登录状态
 		if(PPU){
 			this.hasLogin = true;
-			this.username = username;
+			this.username =  JSON.parse(PPU).userName;
 		}else{
 			this.hasLogin = false;
+		}
+		//设置导航状态
+		let curPage = window.location.href.split('/')[3];
+		console.log(curPage);
+		switch(curPage){
+			case 'weekly':
+				this.curTab = 1;
+				break;
+			case 'profile':
+				this.curTab = 2;
+				break;
+			default:
+				this.curTab = 0;
 		}
 	},
 	methods: {

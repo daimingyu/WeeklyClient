@@ -1,17 +1,18 @@
 <template>
-  <div class="weekly">
-      <router-view/>
+  <div class="detail">
+      <WDetail v-bind:id="id"/>
   </div>
 </template>
 
 <script>
-import Cookie from '../utils/cookie.vue';
+import WDetail from '../components/WDetail';
 export default {
-  name: 'Weekly',
+  name: 'Detail',
+  components: { WDetail },
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      hasLogin: false
+      id: this.$route.params.id
     }
   }
 }
@@ -19,8 +20,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.weekly{
-  overflow: hidden;
-  float: right;
+.detail{
+    overflow: hidden;
+    float: right;
 }
 </style>

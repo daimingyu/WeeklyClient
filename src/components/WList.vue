@@ -1,8 +1,12 @@
 <template>
     <div>
-        <div class="weekly-list-item"  v-for="(item, index) in data" v-bind:key="{index}">
+        <template v-if="isNoContent">
+            <NoContent />
+        </template>
+        <template v-else>
+            <div class="weekly-list-item"  v-for="(item, index) in data" v-bind:key="{index}"> 
                 <h1 class="weekly-list-title">《{{ item.weeklyName }}》</h1>
-                <div id="weekly-list-wrap">
+                <div id="weekly-list-wrap" >
                     <div class="list-row">
                         <span>工作内容：</span>
                         <span 
@@ -40,27 +44,31 @@
                         <span
                             class="next-work-plan" 
                             ref="nextWorkPlan">
-                            {{ item.nextWorkPlan === "" ? "暂未填写" : item.nextWorkPlan }}
+                            {{ item.nextWeekPlan === "" ? "暂未填写" : item.nextWeekPlan }}
                         </span>
                     </div>
                     <div class="pubish-row-button">
-                        <button class="item-detail">查看详情</button>
-                        <button class="item-update">修改</button>
-                        <button class="item-delete">删除</button>
+                        <router-link v-bind:to="'/weekly/detail/' + item.weeklyId">查看详情</router-link>
+                        <button class="item-update" v-bind:weeklyId="item.weeklyId">修改</button>
+                        <button class="item-delete" v-bind:weeklyId="item.weeklyId" v-on:click="itemDelete($event)">删除</button>
                     </div>
                 </div>
-        </div>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
 import API from '../api/api.vue';
 import Cookie from '../utils/cookie.vue';
+import NoContent from './NoContent.vue';
 export default {
     name: 'WList',
+    components: { NoContent },
 	data () {
 		return {
             msg: 'Welcome to Your Vue.js App',
+            isNoContent: true,
             data: []
 		}
     },
@@ -74,10 +82,25 @@ export default {
         };
         this.$jsonp(path, params).then((data) =>{
             this.data = data.data.dataList;
+            this.isNoContent = data.data.dataList.length === 0 ? true : false;
         });
     },
     methods: {
-
+        itemDelete(event){
+            let path = API.root + API.deleteWeekly;
+            let weeklyId = event.target.getAttribute('weeklyId');
+            let params = {
+               weeklyId: weeklyId
+            };
+            this.$jsonp(path, params).then((data) =>{
+                if(data.data.success){
+                    alert('删除成功');
+                    window.location.href = "//localhost:8081/weekly";
+                }else{
+                    alert('删除失败');
+                }
+            });
+        }
     }
 }
 </script>

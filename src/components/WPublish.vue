@@ -1,14 +1,13 @@
 <template>
 	<div class="weekly-publish">
         <h1 class="weekly-publish-title">《添加周总结》</h1>
-		<form id="weekly-publish-wrap">
+		<div id="weekly-publish-wrap">
             <div class="publish-row-title">
                 <span>文章标题：</span>
                 <textarea 
                     maxlength="20" 
                     name="weekly-name"
-                    ref="weeklyName" 
-                    required
+                    ref="weeklyName"
                     placeholder="请输入周报标题，限20个字符">
                 </textarea>
             </div>
@@ -52,15 +51,15 @@
                 <span>下周计划：</span>
                 <textarea 
                     maxlength="500" 
-                    name="next-work-plan" 
-                    ref="nextWorkPlan"
+                    name="next-week-plan" 
+                    ref="nextWeekPlan"
                     placeholder="请输入下周计划（下周工作开展思路），限500个字符">
                 </textarea>
             </div>
             <div class="pubish-row-button">
                 <button class="publish-save" v-on:click="saveWeekly">保存</button>
             </div>
-		</form>
+		</div>
 	</div>
 </template>
 
@@ -84,7 +83,7 @@ export default {
                 solveProblems: encodeURIComponent(this.$refs.solveProblems.value.trim()),
                 summingUpExperience: encodeURIComponent(this.$refs.summingUpExperience.value.trim()),
                 remainingProblems: encodeURIComponent(this.$refs.remainingProblems.value.trim()),
-                nextWorkPlan: encodeURIComponent(this.$refs.nextWorkPlan.value.trim()),
+                nextWeekPlan: encodeURIComponent(this.$refs.nextWeekPlan.value.trim()),
                 userId: JSON.parse(Cookie.get("PPU")).userId
             }
             console.log(params,path);
@@ -94,13 +93,15 @@ export default {
                 data: params,
                 dataType: 'json',
                 success: function(data){
-                    console.log(data);
-                    if(data.data.data.success){
+                    if(data.data.success){
                         alert("保存成功");
                         window.location.href = "//localhost:8081/weekly";
                     }else{
                         alert("保存失败");
                     }
+                },
+                error: function(){
+                    alert(1);
                 }
             });
         }
