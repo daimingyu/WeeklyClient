@@ -15,7 +15,9 @@ const API =  {
     //删除一个周总结
     'deleteWeekly': '/DeleteWeekly',
     //查询一个周总结
-    'queryOneWeekly': '/QueryOneWeekly'
+    'queryOneWeekly': '/QueryOneWeekly',
+    //更新一个周总结
+    'updateOneWeekly': '/UpdateOneWeekly'
 }
 export default API;
 </script>

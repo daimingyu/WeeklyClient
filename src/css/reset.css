@@ -27,3 +27,27 @@ body, html, p, div, h1, h2, h3, h4, h5, h6, ul, li{
     display: block;
     clear: both;
   }
+  ::-webkit-scrollbar-track-piece{
+    background-color: #fff;
+    -webkit-border-radius: 0
+}
+
+::-webkit-scrollbar {
+    width: 4px
+}
+
+::-webkit-scrollbar-thumb{
+    height: 50px;
+    background-color: #d1d4db;
+    -webkit-border-radius: 5px
+}
+
+::-webkit-scrollbar-thumb:hover{
+    height: 50px;
+    background-color: #bfc1c9;
+    -webkit-border-radius: 5px
+}
+
+::-webkit-scrollbar-track-piece{
+    background: #f8f9fa
+}

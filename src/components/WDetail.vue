@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="weekly-detail-item"> 
-            <h1 class="weekly-detail-title">《{{ data.weeklyName }}》</h1>
+        <div class="weekly-detail-item" ref="item" v-bind:weeklyId="data.weeklyId"> 
+            <h1 class="weekly-detail-title" ref="weeklyName">{{ data.weeklyName }}</h1>
             <div id="weekly-detail-wrap" >
                 <div class="detail-row">
-                    <span>工作内容：</span>
+                    <span>工作内容<a href="javascript:void(0)" v-on:click="change($event)" fun="0">修改</a></span>
                     <span 
                         class="work-content" 
                         ref="workContent">
@@ -12,7 +12,7 @@
                     </span>
                 </div>
                 <div class="detail-row">
-                    <span>解决问题：</span>
+                    <span>解决问题<a href="javascript:void(0)" v-on:click="change($event)" fun="0">修改</a></span>
                     <span
                         class="solve-problems" 
                         ref="solveProblems">
@@ -20,7 +20,7 @@
                     </span>
                 </div>
                 <div class="detail-row">
-                    <span>经验总结：</span>
+                    <span>经验总结<a href="javascript:void(0)" v-on:click="change($event)" fun="0">修改</a></span>
                     <span
                         calss="summing-up-experience" 
                         ref="summingUpExperience">
@@ -28,7 +28,7 @@
                     </span>
                 </div>
                 <div class="detail-row">
-                    <span>遗留问题：</span>
+                    <span>遗留问题<a href="javascript:void(0)" v-on:click="change($event)" fun="0">修改</a></span>
                     <span
                         class="remaining-problems" 
                         ref="remainingProblems">
@@ -36,12 +36,16 @@
                     </span>
                 </div>
                 <div class="detail-row">
-                    <span>下周计划：</span>
+                    <span>下周计划<a href="javascript:void(0)" v-on:click="change($event)" fun="0">修改</a></span>
                     <span
                         class="next-work-plan" 
-                        ref="nextWorkPlan">
+                        ref="nextWeekPlan">
                         {{ data.nextWeekPlan === "" ? "暂未填写" : data.nextWeekPlan }}
                     </span>
+                </div>
+                <div class="pubish-row-button">
+                    <button class="item-save" v-on:click="save" v-bind:weeklyId="data.weeklyId">保存</button>
+                    <button class="back" v-on:click="back">返回</button>
                 </div>
             </div>
         </div>
@@ -81,7 +85,59 @@ export default {
             this.data = data.data.weekly;
         });
     },
-    methods: {}
+    methods: {
+        change(event){
+            let type = event.target.getAttribute('fun');
+            switch(type){
+                case '0':
+                    this.showTexarea(event);
+                    break;
+                case '1':
+                    this.hideTextarea(event);
+                    break;
+            }
+        },
+        showTexarea(){
+            event.target.setAttribute('fun','1');
+            event.target.innerText = '完成';
+            let oSpan = event.target.parentNode.nextElementSibling;
+            let value = oSpan.innerText;
+            oSpan.innerHTML = '<textarea maxlength="500" style="width:100%;height:112px;padding:5px;box-sizing:border-box;background:#f9f9f9;resize:none;overflow:auto;border:1px solid #ccc;">'+ value +'</textarea>';
+        },
+        hideTextarea(){
+            event.target.setAttribute('fun','0');
+            event.target.innerText = '修改';
+            let oSpan = event.target.parentNode.nextElementSibling;
+            let value = oSpan.getElementsByTagName('textarea')[0].value;
+            oSpan.innerHTML = '<span class="work-content" ref="workContent">'+ value +'</span>';
+        },
+        save(){
+            let path = API.root + API.updateOneWeekly;
+            let params = {
+                weeklyName: encodeURIComponent(this.$refs.weeklyName.innerText.trim()),
+                workContent: encodeURIComponent(this.$refs.workContent.innerText.trim()),
+                solveProblems: encodeURIComponent(this.$refs.solveProblems.innerText.trim()),
+                summingUpExperience: encodeURIComponent(this.$refs.summingUpExperience.innerText.trim()),
+                remainingProblems: encodeURIComponent(this.$refs.remainingProblems.innerText.trim()),
+                nextWeekPlan: encodeURIComponent(this.$refs.nextWeekPlan.innerText.trim()),
+                userId: JSON.parse(Cookie.get("PPU")).userId,
+                weeklyId: this.$refs.item.getAttribute('weeklyId'),
+                callbackQuery: "callback",
+                callbackName: "jsonpCallback"
+            }
+            console.log(params,path);
+            this.$jsonp(path, params).then((data) =>{
+                if(data.data.success){
+                    alert('保存成功');
+                }else{
+                    alert('保存失败');
+                }
+            });
+        },
+        back(){
+            this.$router.back(-1);
+        }
+    }
 }
 </script>
 
@@ -102,7 +158,21 @@ export default {
     margin: 0 20px;
     font-size: 16px;
 }
-.detail-row span{
+.detail-row span:nth-child(1){
+    width: 100%;
+    display: inline-block;
+    height: 30px;
+    vertical-align: top;
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.detail-row span:nth-child(1) a{
+    margin-left: 5px;
+    font-size: 14px;
+}
+.detail-row span:nth-child(2){
     width: 100%;
     display: inline-block;
     vertical-align: top;
@@ -114,5 +184,8 @@ export default {
     box-sizing: border-box;
     margin: 16px 0;
     overflow: hidden;
+}
+.pubish-row-button{
+    margin: 16px 0;
 }
 </style>

@@ -5,7 +5,7 @@
         </template>
         <template v-else>
             <div class="weekly-list-item"  v-for="(item, index) in data" v-bind:key="{index}"> 
-                <h1 class="weekly-list-title">《{{ item.weeklyName }}》</h1>
+                <h1 class="weekly-list-title">{{ item.weeklyName }}</h1>
                 <div id="weekly-list-wrap" >
                     <div class="list-row">
                         <span>工作内容：</span>
@@ -49,7 +49,6 @@
                     </div>
                     <div class="pubish-row-button">
                         <router-link v-bind:to="'/weekly/detail/' + item.weeklyId">查看详情</router-link>
-                        <button class="item-update" v-bind:weeklyId="item.weeklyId">修改</button>
                         <button class="item-delete" v-bind:weeklyId="item.weeklyId" v-on:click="itemDelete($event)">删除</button>
                     </div>
                 </div>

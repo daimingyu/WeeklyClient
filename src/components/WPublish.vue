@@ -1,6 +1,6 @@
 <template>
 	<div class="weekly-publish">
-        <h1 class="weekly-publish-title">《添加周总结》</h1>
+        <h1 class="weekly-publish-title">添加总结</h1>
 		<div id="weekly-publish-wrap">
             <div class="publish-row-title">
                 <span>文章标题：</span>
@@ -8,7 +8,7 @@
                     maxlength="20" 
                     name="weekly-name"
                     ref="weeklyName"
-                    placeholder="请输入周报标题，限20个字符">
+                    placeholder="请输入总结标题，限20个字符">
                 </textarea>
             </div>
             <div class="publish-row">
