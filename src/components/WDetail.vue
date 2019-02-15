@@ -109,7 +109,7 @@ export default {
             event.target.innerText = '修改';
             let oSpan = event.target.parentNode.nextElementSibling;
             let value = oSpan.getElementsByTagName('textarea')[0].value;
-            oSpan.innerHTML = '<span class="work-content" ref="workContent">'+ value +'</span>';
+            oSpan.innerHTML = '<span class="work-content" ref="workContent">'+ (value===""?"暂未填写":value) +'</span>';
         },
         save(){
             let path = API.root + API.updateOneWeekly;
@@ -149,6 +149,7 @@ export default {
 	padding: 0;
 	background-color: #ffffff;
     margin-top: 20px;
+    padding-bottom: 16px;
 }
 .weekly-detail-title{
     height: 50px;
@@ -185,7 +186,19 @@ export default {
     margin: 16px 0;
     overflow: hidden;
 }
-.pubish-row-button{
-    margin: 16px 0;
+.item-save, .back{
+    font-size: 12px;
+    width: 80px;
+    height: 28px;
+    text-align: center;
+    border: 1px solid #007fff;
+    background: #007fff;
+    color: white;
+    cursor: pointer;
+}
+
+.item-save:hover, .back:hover{
+    border: 1px solid #0079f1;
+    background: #0079f1;
 }
 </style>

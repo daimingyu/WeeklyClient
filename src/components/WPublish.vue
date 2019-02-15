@@ -113,10 +113,10 @@ export default {
 <style scoped>
 .weekly-publish{
     width: 720px;
-	margin: 0;
+	margin-top: 20px;
 	padding: 0;
 	background-color: #ffffff;
-    margin-top: 20px;
+    padding-bottom: 16px;
 }
 .weekly-publish-title{
     height: 50px;
@@ -164,7 +164,19 @@ export default {
     box-sizing: border-box;
     margin: 16px 0;
 }
-.pubish-row-button{
-    margin: 16px 0;
+.publish-save{
+    font-size: 14px;
+    width: 100px;
+    height: 35px;
+    text-align: center;
+    border: 1px solid #007fff;
+    background: #007fff;
+    color: white;
+    cursor: pointer;
+}
+.publish-save:hover{
+    border: 1px solid #0079f1;
+    background: #0079f1;
+
 }
 </style>

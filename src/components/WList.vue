@@ -48,8 +48,8 @@
                         </span>
                     </div>
                     <div class="pubish-row-button">
-                        <router-link v-bind:to="'/weekly/detail/' + item.weeklyId">查看详情</router-link>
-                        <button class="item-delete" v-bind:weeklyId="item.weeklyId" v-on:click="itemDelete($event)">删除</button>
+                        <router-link class="item-detail" v-bind:to="'/weekly/detail/' + item.weeklyId">查看详情</router-link>
+                        <a class="item-delete" href="javascript:void(0);" v-bind:weeklyId="item.weeklyId" v-on:click="itemDelete($event)">删除</a>
                     </div>
                 </div>
             </div>
@@ -112,6 +112,7 @@ export default {
 	padding: 0;
 	background-color: #ffffff;
     margin-top: 20px;
+    padding-bottom: 16px;
 }
 .weekly-list-title{
     height: 50px;
@@ -137,7 +138,20 @@ export default {
     box-sizing: border-box;
     margin: 16px 0;
 }
-.pubish-row-button{
-    margin: 16px 0;
+.item-detail, .item-delete{
+    display: inline-block;
+    font-size: 12px;
+    width: 80px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border: 1px solid #007fff;
+    background: #007fff;
+    color: white;
+    cursor: pointer;
+}
+.item-detail:hover, .item-delete:hover{
+    border: 1px solid #0079f1;
+    background: #0079f1;
 }
 </style>

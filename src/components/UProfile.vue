@@ -3,17 +3,17 @@
         <h1 class="user-profile-title">个人资料</h1>
         <div id="user-profile-wrap">
             <div class="user-profile-usernqme">
-                <span>用户名：</span>
+                <label>用户名：</label>
                 <input type="text" required placeholder="请输入新用户名" ref="userName" v-bind:value="username"/>
                 <span class="update-username-ok" v-on:click="updateName">确认修改</span>
             </div>
             <div class="user-profile-password">
                 <div class="update-password-wrap">
-                    <p><label>旧密码：</label><input type="password" placeholder="请输入旧密码"/></p>
-                    <p><label>新密码：</label><input type="password" placeholder="请输入新密码"></p>
-                    <p><label>确认密码：</label><input type="password" placeholder="请确认新密码"/></p>
+                    <p><label>旧密码：</label><input type="password" ref="old" placeholder="请输入旧密码"/></p>
+                    <p><label>新密码：</label><input type="password" ref="new" placeholder="请输入新密码"></p>
+                    <p><label>确认密码：</label><input type="password" ref="confirm" placeholder="请确认新密码"/></p>
                 </div>
-                <span class="update-password-ok">确认修改</span>
+                <span class="update-password-ok" v-on:click="updatePassword">确认修改</span>
             </div>
         </div>
   </div>
@@ -53,6 +53,73 @@ export default {
                 }
                 console.log(data);
             });
+        },
+        checkUserPass(username, password, callback){
+            let path = API.root + API.checkUserLogin;
+            let params = {
+                username: username,
+                password: password,
+                callbackQuery: "callback",
+                callbackName: "jsonpCallback"
+            };
+            this.$jsonp(path, params).then((data) =>{
+                if(data.data.loginFlag){
+                    callback.apply(this);
+                }else{
+                    alert('旧密码输入错误');
+                }
+            });
+        },
+        updatePassword(){
+            let oldPass = this.$refs.old.value.trim();
+            let newPass = this.$refs.new.value.trim();
+            let confirm = this.$refs.confirm.value.trim();
+            let userName = encodeURIComponent(JSON.parse(Cookie.get("PPU")).userName);
+            let userId = JSON.parse(Cookie.get("PPU")).userId;
+
+            if(oldPass === ""){
+                alert("旧密码不能为空");
+                return ;
+            }
+
+            if(newPass === ""){
+                alert("新密码不能为空");
+                return ;
+            }
+
+            if(confirm === ""){
+                alert("请重新确认密码");
+                return ;
+            }
+
+            console.log(oldPass, newPass, confirm);
+            this.checkUserPass(userName, oldPass, () => {
+                if(newPass !== confirm){
+                    alert('新密码不一样');
+                    return;
+                }
+
+                if(newPass === oldPass){
+                    alert('新密码不能与旧密码一样');
+                    return;
+                }
+
+                let path = API.root + API.updateUserPass;
+                let params = {
+                    userId: userId,
+                    password: newPass,
+                    callbackQuery: "callback",
+                    callbackName: "jsonpCallback"
+                };
+                this.$jsonp(path, params).then((data) =>{
+                    if(data.data.success){
+                        alert('修改成功');
+                    }else{
+                        alert('修改失败');
+                    }
+                });
+            });
+            
         }
   }
 }
@@ -85,8 +152,23 @@ export default {
     box-sizing: border-box;
     margin: 16px 20px 0;
 }
+.user-profile-usernqme label{
+    margin-left: 16px;
+}
 .update-password-wrap{
     display: inline-block;
+}
+.update-password-wrap p:nth-of-type(1){
+    padding-left: 16px;
+    margin-bottom: 16px;
+}
+
+.update-password-wrap p:nth-of-type(2){
+    padding-left: 16px;
+    margin-bottom: 16px;
+}
+.update-password-wrap input{
+    margin-left: 3px;
 }
 .update-username-ok,.update-password-ok{
     float: right;

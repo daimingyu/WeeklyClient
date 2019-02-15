@@ -19,7 +19,9 @@ const API =  {
     //更新一个周总结
     'updateOneWeekly': '/UpdateOneWeekly',
     //更新用户名
-    'updateUserName': '/UpdateUserName'
+    'updateUserName': '/UpdateUserName',
+    //更新用户密码
+    'updateUserPass': '/UpdateUserPass'
 }
 export default API;
 </script>
