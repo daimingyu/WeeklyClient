@@ -17,7 +17,9 @@ const API =  {
     //查询一个周总结
     'queryOneWeekly': '/QueryOneWeekly',
     //更新一个周总结
-    'updateOneWeekly': '/UpdateOneWeekly'
+    'updateOneWeekly': '/UpdateOneWeekly',
+    //更新用户名
+    'updateUserName': '/UpdateUserName'
 }
 export default API;
 </script>

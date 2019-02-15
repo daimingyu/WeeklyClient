@@ -1,14 +1,14 @@
 <template>
   <div class="proflie">
-    <WPublish />
+    <UProfile />
   </div>
 </template>
 
 <script>
-import WPublish from '../components/WPublish';
+import UProfile from '../components/UProfile';
 export default {
   name: 'Profile',
-  components: { WPublish },
+  components: { UProfile },
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
