@@ -77,6 +77,10 @@ export default {
     methods: {
         saveWeekly(){
             let path = API.root + API.insertWeekly;
+            if(this.$refs.weeklyName.value.trim() === ''){
+                alert('名称不能为空');
+                return;
+            }
             let params = {
                 weeklyName: encodeURIComponent(this.$refs.weeklyName.value.trim()),
                 workContent: encodeURIComponent(this.$refs.workContent.value.trim()),
