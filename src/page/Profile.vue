@@ -1,17 +1,32 @@
 <template>
   <div class="proflie">
-    <UProfile />
+    <template v-if="hasLogin">
+        <UProfile />  
+      </template>
+      <template v-else>
+        <Unlogin />
+      </template>
   </div>
 </template>
 
 <script>
 import UProfile from '../components/UProfile';
+import Unlogin from '../components/Unlogin';
+import Cookie from '../utils/cookie.vue';
 export default {
   name: 'Profile',
-  components: { UProfile },
+  components: { UProfile, Unlogin },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      hasLogin: false
+    }
+  },
+  created(){
+    if(Cookie.get('PPU')){
+        this.hasLogin = true;
+    }else{
+        this.hasLogin = false;
     }
   }
 }
