@@ -54,6 +54,7 @@
 
 <script>
 import API from '../api/api.vue';
+import $ from 'jquery';
 import Cookie from '../utils/cookie.vue';
 export default {
     name: 'WList',
@@ -82,7 +83,10 @@ export default {
         };
         this.$jsonp(path, params).then((data) =>{
             console.log(data);
-            this.data = data.data.weekly;
+            
+            var data = API.mode === 'node' ? data : data.data ;
+
+            this.data = data.weekly;
         });
     },
     methods: {
@@ -126,11 +130,27 @@ export default {
                 callbackName: "jsonpCallback"
             }
             console.log(params,path);
-            this.$jsonp(path, params).then((data) =>{
-                if(data.data.success){
-                    alert('保存成功');
-                }else{
-                    alert('保存失败');
+            $.ajax({
+                type: 'POST',
+                url: path,
+                data: params,
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+
+                    var data = API.mode === 'node' ? data : data.data ;
+
+                    if(data.success){
+                        alert("保存成功");
+                        window.location.href =  '//' + window.location.href.split('/')[2] + "/weekly";
+                    }else{
+                        alert("保存失败");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log(XMLHttpRequest);
+                    console.log(textStatus);
+                    console.log(errorThrown);
                 }
             });
         },

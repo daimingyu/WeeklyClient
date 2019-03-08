@@ -42,7 +42,10 @@ export default {
                 callbackName: "jsonpCallback"
             };
             this.$jsonp(path, params).then((data) =>{
-                if(data.data.success){
+
+                var data = API.mode === 'node' ? data : data.data ;
+
+                if(data.success){
                     let obj = JSON.parse(Cookie.get('PPU'));
                     obj.userName = this.$refs.userName.value.trim();
                     Cookie.set('PPU', JSON.stringify(obj));
@@ -63,6 +66,7 @@ export default {
                 callbackName: "jsonpCallback"
             };
             this.$jsonp(path, params).then((data) =>{
+
                 if(data.data.loginFlag){
                     callback.apply(this);
                 }else{
@@ -112,7 +116,10 @@ export default {
                     callbackName: "jsonpCallback"
                 };
                 this.$jsonp(path, params).then((data) =>{
-                    if(data.data.success){
+
+                    var data = API.mode === 'node' ? data : data.data ;
+
+                    if(data.success){
                         alert('修改成功');
                     }else{
                         alert('修改失败');

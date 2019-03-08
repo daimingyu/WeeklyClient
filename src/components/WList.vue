@@ -80,8 +80,11 @@ export default {
             callbackName: "jsonpCallback"
         };
         this.$jsonp(path, params).then((data) =>{
-            this.data = data.data.dataList;
-            this.isNoContent = data.data.dataList.length === 0 ? true : false;
+
+            var data = API.mode === 'node' ? data : data.data ;
+
+            this.data = data.dataList;
+            this.isNoContent = data.dataList.length === 0 ? true : false;
         });
     },
     methods: {
@@ -92,9 +95,10 @@ export default {
                weeklyId: weeklyId
             };
             this.$jsonp(path, params).then((data) =>{
-                if(data.data.success){
+                var data = API.mode === 'node' ? data : data.data ;
+                if(data.success){
                     alert('删除成功');
-                    window.location.href = "//localhost:8081/weekly";
+                    window.location.href = '//' + window.location.href.split('/')[2] + "/weekly";
                 }else{
                     alert('删除失败');
                 }

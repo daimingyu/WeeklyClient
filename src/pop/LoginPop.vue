@@ -73,7 +73,10 @@ export default {
                 callbackName: "jsonpCallback"
             };
             this.$jsonp(path, params).then((data) =>{
-                if(data.data.hasUser){
+
+                var data = API.mode === 'node' ? data : data.data ;
+
+                if(data.hasUser){
                     callback.apply(this);
                 }else{
                     this.$refs.uTips.innerHTML = "*不存在该用户名";
@@ -107,6 +110,7 @@ export default {
                     callbackName: "jsonpCallback"
                 };
                 this.$jsonp(path, params).then((data) =>{
+
                     if(data.data.loginFlag){
                         alert("登陆成功");
                         this.setCookie(data.data);

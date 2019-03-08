@@ -97,15 +97,20 @@ export default {
                 data: params,
                 dataType: 'json',
                 success: function(data){
-                    if(data.data.success){
+
+                    var data = API.mode === 'node' ? data : data.data ;
+                    
+                    if(data.success){
                         alert("保存成功");
-                        window.location.href = "//localhost:8081/weekly";
+                        window.location.href = '//' + window.location.href.split('/')[2] + "/weekly";
                     }else{
                         alert("保存失败");
                     }
                 },
-                error: function(){
-                    alert(1);
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log(XMLHttpRequest);
+                    console.log(textStatus);
+                    console.log(errorThrown);
                 }
             });
         }
